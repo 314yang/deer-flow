@@ -5,7 +5,7 @@
     "podcast_generation": "./src/podcast/graph/builder.py:workflow",
     "ppt_generation": "./src/ppt/graph/builder.py:workflow"
   },
-  "python_version": "3.12",
+  "python_version": "3.11",
   "env": "./.env",
   "dependencies": ["."]
 }

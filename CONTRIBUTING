@@ -85,7 +85,7 @@ There are many ways you can contribute to DeerFlow:
 - Write descriptive docstrings
 - Keep functions and methods focused and single-purpose
 - Comment complex logic
-- Python version requirement: >= 3.12
+- Python version requirement: >= 3.11
 
 ## Testing
 

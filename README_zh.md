@@ -1,6 +1,6 @@
 # 🦌 DeerFlow
 
-[![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 [English](./README.md) | [简体中文](./README_zh.md) | [日本語](./README_ja.md) | [Deutsch](./README_de.md) | [Español](./README_es.md) | [Русский](./README_ru.md) |[Portuguese](./README_pt.md)
@@ -65,7 +65,7 @@ DeerFlow 使用 Python 开发，并配有用 Node.js 编写的 Web UI。为确�
 
 确保您的系统满足以下最低要求：
 
-- **[Python](https://www.python.org/downloads/):** 版本 `3.12+`
+- **[Python](https://www.python.org/downloads/):** 版本 `3.11+`
 - **[Node.js](https://nodejs.org/en/download/):** 版本 `22+`
 
 ### 安装
@@ -283,7 +283,7 @@ DeerFlow 包含一个`langgraph.json`配置文件，该文件定义了 LangGraph
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # 安装依赖并启动LangGraph服务器
-uvx --refresh --from "langgraph-cli[inmem]" --with-editable . --python 3.12 langgraph dev --allow-blocking
+uvx --refresh --from "langgraph-cli[inmem]" --with-editable . --python 3.11 langgraph dev --allow-blocking
 ```
 
 ##### Windows / Linux

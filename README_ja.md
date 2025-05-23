@@ -1,6 +1,6 @@
 # 🦌 DeerFlow
 
-[![Python 3.12+](https://img.shields.io/badge/python-3.12+-blue.svg)](https://www.python.org/downloads/)
+[![Python 3.11+](https://img.shields.io/badge/python-3.11+-blue.svg)](https://www.python.org/downloads/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 [English](./README.md) | [简体中文](./README_zh.md) | [日本語](./README_ja.md) | [Deutsch](./README_de.md) | [Español](./README_es.md) | [Русский](./README_ru.md) | [Portuguese](./README_pt.md)
@@ -65,7 +65,7 @@ DeerFlow は Python で開発され、Node.js で書かれた Web UI が付属�
 
 システムが以下の最小要件を満たしていることを確認してください：
 
-- **[Python](https://www.python.org/downloads/):** バージョン `3.12+`
+- **[Python](https://www.python.org/downloads/):** バージョン `3.11+`
 - **[Node.js](https://nodejs.org/en/download/):** バージョン `22+`
 
 ### インストール
@@ -283,7 +283,7 @@ DeerFlow には`langgraph.json`設定ファイルが含まれており、これ�
 curl -LsSf https://astral.sh/uv/install.sh | sh
 
 # 依存関係をインストールしLangGraphサーバーを開始
-uvx --refresh --from "langgraph-cli[inmem]" --with-editable . --python 3.12 langgraph dev --allow-blocking
+uvx --refresh --from "langgraph-cli[inmem]" --with-editable . --python 3.11 langgraph dev --allow-blocking
 ```
 
 ##### Windows / Linux
