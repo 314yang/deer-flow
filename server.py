@@ -3,6 +3,15 @@
 
 """
 Server script for running the DeerFlow API.
+[用户请求]
+    ↓
+[server.py] → 启动 uvicorn 服务器
+    ↓
+[src/server/app.py] → 处理具体请求（路由、状态图、工具调用）
+    ↓
+[src/graph/builder.py]  → 状态图
+    ↓
+[graph/nodes.py] → LLM Agent 执行逻辑
 """
 
 import argparse
@@ -68,6 +77,7 @@ if __name__ == "__main__":
     try:
         logger.info(f"Starting DeerFlow API server on {args.host}:{args.port}")
         uvicorn.run(
+            # src.server:app：表示从 src/server/app.py 中加载名为 app 的 FastAPI 实例。
             "src.server:app",
             host=args.host,
             port=args.port,

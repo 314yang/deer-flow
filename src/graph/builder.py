@@ -18,7 +18,26 @@ from .nodes import (
 
 
 def _build_base_graph():
-    """Build and return the base state graph with all nodes and edges."""
+    """Build and return the base state graph with all nodes and edges.
+    未在此声明节点之间的跳转是通过 Command 动态控制
+    [START] 
+    ↓
+    [coordinator_node] → 返回 goto="planner" 或 "background_investigator"
+    ↓
+    [planner_node] → 可能 goto="human_feedback" 或 "reporter"
+    ↓
+    [human_feedback_node] → 可能 goto="planner" 或 "reporter"
+    ↓
+    [research_team_node] → 返回 goto="researcher" 或 "coder"
+    ↓
+    [researcher_node] → 返回 goto="reporter" 或 "coder"
+    ↓
+    [coder_node] → 返回 goto="reporter" 或 "__end__"
+    ↓
+    [reporter_node] → 返回最终结果
+    ↓
+    [END]
+    """
     builder = StateGraph(State)
     builder.add_edge(START, "coordinator")
     builder.add_node("coordinator", coordinator_node)

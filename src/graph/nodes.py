@@ -41,6 +41,7 @@ def handoff_to_planner(
     """Handoff to planner agent to do plan."""
     # This tool is not returning anything: we're just using it
     # as a way for LLM to signal that it needs to hand off to planner agent
+    #函数仅用于通知系统将控制权移交给 planner agent
     return
 
 
@@ -207,12 +208,25 @@ def human_feedback_node(
 
 def coordinator_node(
     state: State,
-) -> Command[Literal["planner", "background_investigator", "__end__"]]:
-    """Coordinator node that communicate with customers."""
+) -> Command[Literal["planner", "background_investigator", "__end__"]]: 
+    """Coordinator node that communicate with customers.
+    
+    This node is responsible for:
+    - Communicating with the user (customer)
+    - Deciding whether to hand off control to other agents
+    - Updating the state with relevant information (e.g., locale)
+    - Returning a Command to direct the flow to the next node
+
+    Returns:
+        Command object specifying:
+        - State updates (e.g., locale)
+        - Control flow destination (goto)
+    """
     logger.info("Coordinator talking.")
     messages = apply_prompt_template("coordinator", state)
     response = (
         get_llm_by_type(AGENT_LLM_MAP["coordinator"])
+        # 用于流程控制
         .bind_tools([handoff_to_planner])
         .invoke(messages)
     )
@@ -230,6 +244,7 @@ def coordinator_node(
             for tool_call in response.tool_calls:
                 if tool_call.get("name", "") != "handoff_to_planner":
                     continue
+                #  get the locale from the tool call args 语言偏好
                 if tool_locale := tool_call.get("args", {}).get("locale"):
                     locale = tool_locale
                     break
@@ -241,8 +256,11 @@ def coordinator_node(
         )
         logger.debug(f"Coordinator response: {response}")
 
+    # Command，控制流（边）和状态更新（节点）结合使用：更新状态，并决定下一个节点
     return Command(
+        # state update
         update={"locale": locale},
+        # control flow
         goto=goto,
     )
 
