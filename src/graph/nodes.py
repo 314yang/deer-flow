@@ -41,7 +41,6 @@ def handoff_to_planner(
     """Handoff to planner agent to do plan."""
     # This tool is not returning anything: we're just using it
     # as a way for LLM to signal that it needs to hand off to planner agent
-    #函数仅用于通知系统将控制权移交给 planner agent
     return
 
 
@@ -208,25 +207,12 @@ def human_feedback_node(
 
 def coordinator_node(
     state: State,
-) -> Command[Literal["planner", "background_investigator", "__end__"]]: 
-    """Coordinator node that communicate with customers.
-    
-    This node is responsible for:
-    - Communicating with the user (customer)
-    - Deciding whether to hand off control to other agents
-    - Updating the state with relevant information (e.g., locale)
-    - Returning a Command to direct the flow to the next node
-
-    Returns:
-        Command object specifying:
-        - State updates (e.g., locale)
-        - Control flow destination (goto)
-    """
+) -> Command[Literal["planner", "background_investigator", "__end__"]]:
+    """Coordinator node that communicate with customers."""
     logger.info("Coordinator talking.")
     messages = apply_prompt_template("coordinator", state)
     response = (
         get_llm_by_type(AGENT_LLM_MAP["coordinator"])
-        # 用于流程控制
         .bind_tools([handoff_to_planner])
         .invoke(messages)
     )
@@ -244,7 +230,6 @@ def coordinator_node(
             for tool_call in response.tool_calls:
                 if tool_call.get("name", "") != "handoff_to_planner":
                     continue
-                #  get the locale from the tool call args 语言偏好
                 if tool_locale := tool_call.get("args", {}).get("locale"):
                     locale = tool_locale
                     break
@@ -256,11 +241,8 @@ def coordinator_node(
         )
         logger.debug(f"Coordinator response: {response}")
 
-    # Command，控制流（边）和状态更新（节点）结合使用：更新状态，并决定下一个节点
     return Command(
-        # state update
         update={"locale": locale},
-        # control flow
         goto=goto,
     )
 
@@ -451,34 +433,46 @@ async def _setup_and_execute_agent_step(
     if configurable.mcp_settings:
         for server_name, server_config in configurable.mcp_settings["servers"].items():
             if (
+                # cur mcp tool is enable
                 server_config["enabled_tools"]
                 and agent_type in server_config["add_to_agents"]
             ):
+                # 提取服务器配置中的必要信息（传输方式、命令、参数、URL、环境变量），并存储到 mcp_servers 字典中
                 mcp_servers[server_name] = {
                     k: v
                     for k, v in server_config.items()
                     if k in ("transport", "command", "args", "url", "env")
                 }
+                # 遍历服务器启用的工具列表，将工具名和对应的服务器名存储到 enabled_tools 字典中
                 for tool_name in server_config["enabled_tools"]:
                     enabled_tools[tool_name] = server_name
 
     # Create and execute agent with MCP tools if available
     if mcp_servers:
+        # 异步上下文管理器，用于管理 MultiServerMCPClient 实例的生命周期
+        # 确保在使用完客户端后自动关闭连接
         async with MultiServerMCPClient(mcp_servers) as client:
+            # 复制默认工具列表，避免修改原始列表
             loaded_tools = default_tools[:]
+            # 遍历客户端获取的工具列表
             for tool in client.get_tools():
+                # 检查工具名是否在启用的工具列表中
                 if tool.name in enabled_tools:
+                    # 为工具的描述添加服务器信息
                     tool.description = (
                         f"Powered by '{enabled_tools[tool.name]}'.\n{tool.description}"
                     )
+                    # 将工具添加到加载的工具列表中
                     loaded_tools.append(tool)
+            # 使用指定的代理类型、工具列表创建代理
             agent = create_agent(agent_type, agent_type, loaded_tools, agent_type)
+            # 异步执行代理步骤，并返回命令
             return await _execute_agent_step(state, agent, agent_type)
     else:
-        # Use default tools if no MCP servers are configured
+        # 如果没有配置 MCP 服务器，则使用默认工具创建代理
         agent = create_agent(agent_type, agent_type, default_tools, agent_type)
+        # 异步执行代理步骤，并返回命令
         return await _execute_agent_step(state, agent, agent_type)
-
 
 async def researcher_node(
     state: State, config: RunnableConfig

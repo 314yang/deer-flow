@@ -56,24 +56,28 @@ async def run_agent_workflow_async(
         "enable_background_investigation": enable_background_investigation,
     }
     config = {
+        # 运行参数
         "configurable": {
             "thread_id": "default",
             "max_plan_iterations": max_plan_iterations,
             "max_step_num": max_step_num,
             "mcp_settings": {
                 "servers": {
-                    "mcp-github-trending": {
-                        "transport": "stdio",
-                        "command": "uvx",
-                        "args": ["mcp-github-trending"],
-                        "enabled_tools": ["get_github_trending_repositories"],
-                        "add_to_agents": ["researcher"],
-                    }
+                    # need python 3.12
+                    # "mcp-github-trending": {
+                    #     "transport": "stdio",
+                    #     "command": "uvx",
+                    #     "args": ["mcp-github-trending"],
+                    #     "enabled_tools": ["get_github_trending_repositories"],
+                    #     "add_to_agents": ["researcher"],
+                    # }
                 }
             },
         },
+        # 递归限制，设置为 100
         "recursion_limit": 100,
     }
+    # 消息计数器，判断是否有新消息
     last_message_cnt = 0
     async for s in graph.astream(
         input=initial_state, config=config, stream_mode="values"

@@ -8,6 +8,7 @@ https://docs.tavily.com/documentation/quickstart#get-your-free-tavily-api-key
 git clone https://github.com/bytedance/deer-flow.git
 cd deer-flow
 
+pip install uv
 # 安装依赖
 uv sync
 
@@ -18,7 +19,7 @@ cp .env.example .env
 cp conf.yaml.example conf.yaml
 
 # 安装 marp 用于生成 PPT
-brew install marp-cli
+# brew install marp-cli
 
 # 控制台调用
 uv run main.py
