@@ -22,17 +22,17 @@ def _build_base_graph():
     未在此声明节点之间的跳转是通过 Command 动态控制
     [START] 
     ↓
-    [coordinator_node] → 返回 goto="planner" 或 "background_investigator"
+    [coordinator_node] → 返回 goto="planner" 或 "background_investigator：web eg. Tavily,只用 title 和 concent"  或 "__end__"
     ↓
     [planner_node] → 可能 goto="human_feedback" 或 "reporter"
     ↓
-    [human_feedback_node] → 可能 goto="planner" 或 "reporter"
+    [human_feedback_node] → 可能 goto="planner", "research_team", "reporter", "__end__"
     ↓
-    [research_team_node] → 返回 goto="researcher" 或 "coder"
+    [research_team_node] → 返回 goto="planner", "researcher", "coder"
     ↓
-    [researcher_node] → 返回 goto="reporter" 或 "coder"
+    [researcher_node] → 返回 goto="research_team", agent(mcp tools/ @tool(web_search_tool->url->crawl_tool) see in src/prompts/researcher.md)
     ↓
-    [coder_node] → 返回 goto="reporter" 或 "__end__"
+    [coder_node] → 返回 goto="research_team", agent(mcp tools)
     ↓
     [reporter_node] → 返回最终结果
     ↓

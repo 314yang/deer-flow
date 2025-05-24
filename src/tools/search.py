@@ -19,6 +19,7 @@ from src.tools.decorators import create_logged_tool
 logger = logging.getLogger(__name__)
 
 # Create logged versions of the search tools
+# 函数被赋值给变量。函数返回类，即变量引用了一个类
 LoggedTavilySearch = create_logged_tool(TavilySearchResultsWithImages)
 LoggedDuckDuckGoSearch = create_logged_tool(DuckDuckGoSearchResults)
 LoggedBraveSearch = create_logged_tool(BraveSearch)
@@ -28,6 +29,7 @@ LoggedArxivSearch = create_logged_tool(ArxivQueryRun)
 # Get the selected search tool
 def get_web_search_tool(max_search_results: int):
     if SELECTED_SEARCH_ENGINE == SearchEngine.TAVILY.value:
+        # 类实例化
         return LoggedTavilySearch(
             name="web_search",
             max_results=max_search_results,

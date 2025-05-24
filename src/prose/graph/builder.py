@@ -19,7 +19,7 @@ def optional_node(state: ProseState):
 
 
 def build_graph():
-    """Build and return the ppt workflow graph."""
+    """Build and return the ppt workflow graph. 文本处理 """
     # build state graph
     builder = StateGraph(ProseState)
     builder.add_node("prose_continue", prose_continue_node)

@@ -30,9 +30,19 @@ uv run server.py
 
 ```
 
+# 调用链
+[server.py](server.py)
+[src/graph/builder.py](src/graph/builder.py)
+- podcast：[src/podcast/graph/builder.py](src/podcast/graph/builder.py)
+- ppt：[src/ppt/graph/builder.py](src/ppt/graph/builder.py)
+- 文本处理：[src/prose/graph/builder.py](src/prose/graph/builder.py)
+
 # llm
 
 ## function call
+
+代码：[src/graph/nodes.py#coordinator_node](src/graph/nodes.py#coordinator_node)
+
 
 | 阶段 | 关键操作 |
 |------|----------|
@@ -54,7 +64,6 @@ graph LR
     H --> I[(更新状态 / 流程跳转)]
 ```
 
-代码：[src/graph/nodes.py#coordinator_node](src/graph/nodes.py#coordinator_node)
 1. 工具定义：用`@tool`装饰器，将handoff_to_planner 函数注册为一个 LangChain 工具 ，LLM 可以在响应中通过 `.tool_calls` 调用它。
 ```python
 @tool

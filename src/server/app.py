@@ -120,6 +120,8 @@ async def _astream_workflow_generator(
                         "content": event_data["__interrupt__"][0].value,
                         "finish_reason": "interrupt",
                         "options": [
+                            # - text ：这是展示给用户看的选项文本，用于描述该操作的功能。
+                            # - value ：这是选项对应的内部标识，当用户选择某个选项时，系统会使用这个 value 来识别用户的选择并执行相应的逻辑。
                             {"text": "Edit plan", "value": "edit_plan"},
                             {"text": "Start research", "value": "accepted"},
                         ],

@@ -65,7 +65,8 @@ class LoggedToolMixin:
 def create_logged_tool(base_tool_class: Type[T]) -> Type[T]:
     """
     Factory function to create a logged version of any tool class.
-
+    此函数会生成一个新的类，该类继承自 LoggedToolMixin 和传入的基础工具类，
+    从而为基础工具类添加日志记录功能。
     Args:
         base_tool_class: The original tool class to be enhanced with logging
 
@@ -73,6 +74,8 @@ def create_logged_tool(base_tool_class: Type[T]) -> Type[T]:
         A new class that inherits from both LoggedToolMixin and the base tool class
     """
 
+    # 定义一个新的类，继承自 LoggedToolMixin 和传入的基础工具类
+    # 这样新类就具备了 LoggedToolMixin 提供的日志记录功能
     class LoggedTool(LoggedToolMixin, base_tool_class):
         pass
 
